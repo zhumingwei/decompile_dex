@@ -1,3 +1,4 @@
+#! /usr/bin/env bash
 echo "==========cleaning=============="
 ./clean.sh
 
@@ -8,7 +9,7 @@ echo "==========cleaning=============="
 
 cp demo.apk build/old.apk
 echo "==========unziping=============="
-unzip -o build/old.apk -d build/old
+unzip -q -o build/old.apk -d build/old
 echo "==========dex2jar=============="
 
 dex2jar(){
@@ -26,6 +27,29 @@ do
     dex2jar $eachfile
 done
 
+echo "==========merge=============="
+
+tempfile="build/jars/tmp"
+mkdir $tempfile
+jars=`ls build/jars/*.jar`
+
+unzip_file(){
+   jarfile=$1
+   tempDir=$2
+   echo "unzip ${jarfile} to ${tempDir}"
+   unzip -q -uo $jarfile -d $tempDir
+}
+
+
+for eachfile in $jars
+do
+   unzip_file $eachfile $tempfile
+done
+jar -cvf allinone.jar -C $tempfile .
+mv allinone.jar build/jars/allinone.jar
+rm -r $tempfile
+
+# just open
 outdir="$(pwd)/build"
 echo "目录：$(pwd)/build/jars"
 open "$outdir"
