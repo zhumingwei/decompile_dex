@@ -18,7 +18,10 @@ dex2jar(){
    outdir="build/jars/${out}_dex2jar.jar"
 #    echo ${outdir}
 #    echo $1
-   dex-tools-2.1-SNAPSHOT/d2j-dex2jar.sh --force  -o $outdir $eachfile
+   # 2.1版本
+   # dex-tools-2.1-SNAPSHOT/d2j-dex2jar.sh --force  -o $outdir $eachfile
+   # 2.2版本
+   dex-tools-2.2-SNAPSHOT/d2j-dex2jar.sh --force  -o $outdir $eachfile
 }
 
 dexs=`ls build/old/*.dex | grep 'classes'`
@@ -52,4 +55,7 @@ rm -r $tempfile
 # just open
 outdir="$(pwd)/build"
 echo "目录：$(pwd)/build/jars"
-open "$outdir"
+# open "$outdir"
+
+# open by jd-jui
+java -jar ./source/jd-gui-1.4.0.jar ./build/jars/allinone.jar
